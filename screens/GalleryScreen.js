@@ -9,7 +9,7 @@ const GalleryScreen = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await axios.get('https://ingaliptn.github.io/ReactNativeLab1/data/gallery.json');
+        const response = await axios.get('https://ingaliptn.github.io/ReactNativeLab/data/gallery.json');
         setGalleryData(response.data);
         setLoading(false);
       } catch (error) {
