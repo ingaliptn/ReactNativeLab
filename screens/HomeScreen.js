@@ -9,7 +9,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get('https://github.com/ingaliptn/ReactNativeLab1/tree/main/news.json');
+        const response = await axios.get('https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/ingaliptn/ReactNativeLab1/main/news.json');
         setNewsData(response.data);
         setLoading(false);
       } catch (error) {

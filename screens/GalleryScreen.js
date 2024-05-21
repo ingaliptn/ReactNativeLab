@@ -9,7 +9,7 @@ const GalleryScreen = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await axios.get('https://github.com/ingaliptn/ReactNativeLab1/tree/main/gallery.json');
+        const response = await axios.get('https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/ingaliptn/ReactNativeLab1/main/gallery.json');
         setGalleryData(response.data);
         setLoading(false);
       } catch (error) {
