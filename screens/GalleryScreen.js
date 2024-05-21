@@ -1,34 +1,42 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
-
-const galleryData = [
-  { id: '1', src: require('../assets/gallery-placeholder.png') },
-  { id: '2', src: require('../assets/gallery-placeholder.png') },
-  { id: '3', src: require('../assets/gallery-placeholder.png') },
-  { id: '4', src: require('../assets/gallery-placeholder.png') },
-  { id: '5', src: require('../assets/gallery-placeholder.png') },
-  { id: '6', src: require('../assets/gallery-placeholder.png') },
-  { id: '7', src: require('../assets/gallery-placeholder.png') },
-  { id: '8', src: require('../assets/gallery-placeholder.png') },
-  { id: '9', src: require('../assets/gallery-placeholder.png') },
-  { id: '10', src: require('../assets/gallery-placeholder.png') },
-];
+import React, { useEffect, useState } from 'react';
+import { View, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import axios from 'axios';
 
 const GalleryScreen = () => {
+  const [galleryData, setGalleryData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const response = await axios.get('https://github.com/ingaliptn/ReactNativeLab1/tree/main/gallery.json');
+        setGalleryData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching gallery data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []);
+
   const renderItem = ({ item }) => (
     <View style={styles.galleryItem}>
-      <Image style={styles.image} source={item.src} />
+      <Image style={styles.image} source={{ uri: item.src }} />
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={galleryData}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        numColumns={2}
-      />
+      {loading ? <ActivityIndicator size="large" color="#0000ff" /> : (
+        <FlatList
+          data={galleryData}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          numColumns={2}
+        />
+      )}
     </View>
   );
 };

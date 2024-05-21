@@ -1,23 +1,29 @@
-import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
-
-const newsData = [
-  { id: '1', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '2', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '3', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '4', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '5', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '6', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '7', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '8', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '9', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-  { id: '10', title: 'Заголовок новини', date: 'Дата новини', text: 'Короткий текст новини' },
-];
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import axios from 'axios';
 
 const HomeScreen = () => {
+  const [newsData, setNewsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get('https://github.com/ingaliptn/ReactNativeLab1/tree/main/news.json');
+        setNewsData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching news data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   const renderItem = ({ item }) => (
     <View style={styles.newsItem}>
-      <Image style={styles.image} source={require('../assets/news-placeholder.png')} />
+      <Image style={styles.image} source={{ uri: item.image }} />
       <View style={styles.newsText}>
         <Text style={styles.newsTitle}>{item.title}</Text>
         <Text style={styles.newsDate}>{item.date}</Text>
@@ -29,11 +35,13 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Новини</Text>
-      <FlatList
-        data={newsData}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+      {loading ? <ActivityIndicator size="large" color="#0000ff" /> : (
+        <FlatList
+          data={newsData}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      )}
     </View>
   );
 };
